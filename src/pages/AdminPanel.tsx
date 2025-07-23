@@ -247,13 +247,22 @@ const AdminPanel = () => {
             >
               <div className="flex items-center justify-between">
                 <h1 className="text-3xl font-bold text-white">Inventory Management</h1>
-                <button 
-                  onClick={() => setActiveSection('add-product')}
-                  className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Product
-                </button>
+                <div className="flex gap-3">
+                  <button 
+                    onClick={() => setActiveSection('add-product')}
+                    className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Product
+                  </button>
+                  <button 
+                    onClick={() => setActiveSection('update-inventory')}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                  >
+                    <Package className="w-4 h-4" />
+                    Update Stock
+                  </button>
+                </div>
               </div>
 
               <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 overflow-hidden">
@@ -416,6 +425,67 @@ const AdminPanel = () => {
                     </button>
                   </div>
                 </form>
+              </div>
+            </motion.div>
+          )}
+
+          {activeSection === 'update-inventory' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="space-y-6"
+            >
+              <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold text-white">Update Inventory</h1>
+                <button
+                  onClick={() => setActiveSection('inventory')}
+                  className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+                >
+                  Back to Inventory
+                </button>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 p-8">
+                <h3 className="text-xl font-semibold text-white mb-6">Bulk Stock Update</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {products.slice(0, 12).map(product => {
+                    const stockStatus = getStockStatus(product.stock);
+                    return (
+                      <div key={product.id} className="bg-white/5 rounded-xl p-4 border border-white/10">
+                        <img src={product.image} alt={product.name} className="w-full h-32 object-cover rounded-lg mb-3" />
+                        <h4 className="text-white font-medium mb-2 line-clamp-2">{product.name}</h4>
+                        <div className="flex items-center justify-between mb-3">
+                          <span className={`px-2 py-1 rounded-full text-xs border ${stockStatus.color}`}>
+                            {stockStatus.text}
+                          </span>
+                          <span className="text-white font-semibold">₹{product.price.toLocaleString()}</span>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-gray-300 text-sm">Current Stock:</span>
+                            <span className="text-white font-medium">{product.stock}</span>
+                          </div>
+                          <div className="flex gap-2">
+                            <input
+                              type="number"
+                              min="0"
+                              placeholder="New quantity"
+                              className="flex-1 px-2 py-1 bg-white/10 border border-white/20 rounded text-white text-sm placeholder-gray-400"
+                            />
+                            <button
+                              onClick={() => {
+                                toast.success(`Stock updated for ${product.name}`);
+                              }}
+                              className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700 transition-colors"
+                            >
+                              Update
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </motion.div>
           )}

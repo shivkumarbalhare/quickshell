@@ -305,6 +305,7 @@ const WholesalePage = () => {
                   </div>
                   
                   <button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300">
+                    onClick={() => addToWholesaleCart(product)}
                     <ShoppingCart className="w-4 h-4 inline mr-2" />
                     Add to Cart
                   </button>
